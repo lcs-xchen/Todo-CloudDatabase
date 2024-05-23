@@ -10,16 +10,23 @@ import SwiftUI
 struct ItemView: View {
     
     @Binding var currentItem: TodoItem
+   
+    // Access the view model through the environment
+    @Environment(TodoListViewModel.self) var viewModel
     
     var body: some View {
         Label(
             title: {
                 TextField("", text: $currentItem.title, axis: .vertical)
+                    .onSubmit {
+                        viewModel.update(todo: currentItem)
+                    }
             }, icon: {
                 Image(systemName: currentItem.done == true ? "checkmark.circle" : "circle")
                     // Tap to mark as done
                     .onTapGesture {
                         currentItem.done.toggle()
+                        viewModel.update(todo: currentItem)
                     }
                 
             }
